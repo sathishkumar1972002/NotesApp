@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity(),ToAdapter.NoteClickListener {
             it.putExtra("ID",list[position].Id)
             it.putExtra("TITLE",list[position].title_content)
             it.putExtra("BODY",list[position].body_content)
+            it.putExtra("DATE",list[position].date)
             startActivity(it)
         }
     }

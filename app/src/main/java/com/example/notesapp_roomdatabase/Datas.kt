@@ -9,5 +9,6 @@ data class Datas(
     @PrimaryKey(autoGenerate = true)
     var Id:Int,
     var title_content:String,
-    var body_content:String
+    var body_content:String,
+    var date:String
 )

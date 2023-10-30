@@ -19,6 +19,7 @@ class ToAdapter(var datas : List<Datas>,val noteClickListener: NoteClickListener
         }
         var title = itemview.findViewById<TextView>(R.id.notetitle)
         var content = itemview.findViewById<TextView>(R.id.notebody)
+        var date = itemview.findViewById<TextView>(R.id.date)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder {
@@ -31,6 +32,8 @@ class ToAdapter(var datas : List<Datas>,val noteClickListener: NoteClickListener
         holder.apply {
             title.text=datas[position].title_content
             content.text=datas[position].body_content
+            date.text=datas[position].date
+
 
         }
     }

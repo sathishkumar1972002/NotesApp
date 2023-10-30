@@ -67,7 +67,6 @@
             android:ems="10"
             android:hint="Title"
             android:inputType="textMultiLine"
-            android:maxLines="2"
             android:padding="10dp"
             android:textSize="20sp" />
 

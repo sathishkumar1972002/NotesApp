@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import java.util.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesapp_roomdatabase.databinding.ActivityMainBinding
@@ -16,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class NotesActivity : AppCompatActivity() {
 
@@ -25,6 +28,7 @@ class NotesActivity : AppCompatActivity() {
 
     private lateinit var tit:String
     private lateinit var bdy:String
+    private lateinit var date:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +46,8 @@ class NotesActivity : AppCompatActivity() {
             bind.deleteButton.show()
         }
         bind.deleteButton.setOnClickListener {
-            delete_note()
-           finish()
+            showAlert()
+
         }
 
         bind.add.setOnClickListener{
@@ -56,7 +60,7 @@ class NotesActivity : AppCompatActivity() {
                 if(intent.hasExtra("ID"))
                 {
                          update_note()
-                    finish()
+
                 }
                 else {
                     saveNote()
@@ -87,6 +91,7 @@ class NotesActivity : AppCompatActivity() {
             withContext(Dispatchers.Main)
             {
                 Toast.makeText(this@NotesActivity,"Deleted", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
@@ -94,10 +99,10 @@ class NotesActivity : AppCompatActivity() {
     private fun update_note() {
         val databass = NoteDatabase.getInstance(this)
         val notedao = databass?.Notedao()
-
-
+         var date1 =intent.getStringExtra("DATE")
+          var ID = intent.getIntExtra("ID",0)
         CoroutineScope(Dispatchers.IO).launch {
-            val datas = Datas(intent.getIntExtra("ID",0),tit,bdy)
+            val datas = Datas(ID,tit,bdy, date1!!)
             notedao?.update(datas)
             withContext(Dispatchers.Main)
             {
@@ -110,7 +115,8 @@ class NotesActivity : AppCompatActivity() {
 
         val databass = NoteDatabase.getInstance(this)
         val notedao = databass?.Notedao()
-        val datas = Datas(0,tit,bdy)
+        val date = SimpleDateFormat("dd MMM yy , hh:mm a",Locale.getDefault()).format(Date())
+        val datas = Datas(0,tit,bdy,date)
 
         GlobalScope.launch {
             notedao?.insert(datas)
@@ -131,6 +137,20 @@ class NotesActivity : AppCompatActivity() {
             return false
         }
         return true
+    }
+
+    private fun showAlert() {
+
+        val alert = AlertDialog.Builder(this)
+            .setTitle("Delete All")
+            .setMessage("Do you want to delete this note?")
+            .setPositiveButton("Yes")
+            { p0, p1 ->
+                delete_note()
+            }
+            .setNegativeButton("No",null)
+            .show()
+
     }
 
 
